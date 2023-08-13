@@ -1,5 +1,6 @@
 package com.yp.client.view;
 
+import com.yp.client.service.FileService;
 import com.yp.client.service.MessageService;
 import com.yp.client.service.userClientService;
 import com.yp.client.utils.Utility;
@@ -12,9 +13,9 @@ import org.junit.jupiter.api.Test;
  */
 public class View {
     private String input;
-    private String content;
     userClientService userClientService = new userClientService();
     MessageService messageService = new MessageService();
+    FileService fileService = new FileService();
 
     public static void main(String[] args) {
         new View().mainMenu();
@@ -62,13 +63,16 @@ public class View {
     //二级菜单界面
     public void secMenu(String user) {
         boolean loop = true;
+        String getter;
+        String content;
 
         while (loop) {
             System.out.println("000000000||欢迎" + user + "||000000000");
             System.out.println("\t1. 获取在线用户");
             System.out.println("\t2. 私发消息");
             System.out.println("\t3. 群发消息");
-            System.out.println("\t4. 更多功能...");
+            System.out.println("\t4. 发送文件");
+            System.out.println("\t5. 更多功能...");
             System.out.println("\t9. 退出");
             System.out.print("\n\n\n请选择: ");
             input = Utility.readString(1);
@@ -85,7 +89,7 @@ public class View {
                     break;
                 case "2":
                     System.out.print("你要私发给谁：");
-                    String getter = Utility.readString(20);
+                    getter = Utility.readString(20);
                     System.out.print("内容：");
                     content = Utility.readString(200);
                     messageService.sendMessageToOne(user, getter, content);
@@ -100,6 +104,20 @@ public class View {
                     System.out.print("输入群发内容：");
                     content = Utility.readString(200);
                     messageService.sendMessageToAll(user, content);
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "4":
+                    System.out.print("你要私发给谁：");
+                    getter = Utility.readString(20);
+                    System.out.print("请输入文件在你设备的完整路径：");
+                    content = Utility.readString(200);
+                    System.out.print("请输入文件在对方设备的完整路径：");
+                    content += " " + Utility.readString(200);
+                    fileService.sendFileToOne(user, getter, content);
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {

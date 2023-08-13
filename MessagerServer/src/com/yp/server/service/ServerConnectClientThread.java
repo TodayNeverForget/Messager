@@ -43,8 +43,10 @@ public class ServerConnectClientThread extends Thread {
                 if (message.getMesType().equals(MessageType.MESSAGE_COMM_MES)) {
                     System.out.println("用户||" + message.getSender() + "||向||" + message.getGetter() + "||发送消息");
                     if (ManageServerConnectClientThread.getServerConnectClientThread(message.getGetter()) != null) {
-                        ServerConnectClientThread serverConnectClientThread = ManageServerConnectClientThread.getServerConnectClientThread(message.getGetter());
-                        ObjectOutputStream oos = new ObjectOutputStream(serverConnectClientThread.getSocket().getOutputStream());
+                        ServerConnectClientThread serverConnectClientThread
+                                = ManageServerConnectClientThread.getServerConnectClientThread(message.getGetter());
+                        ObjectOutputStream oos = new ObjectOutputStream
+                                (serverConnectClientThread.getSocket().getOutputStream());
                         oos.writeObject(message);
                         System.out.println("已发送！");
                     } else {
@@ -57,7 +59,26 @@ public class ServerConnectClientThread extends Thread {
 
                         System.out.println("||" + message.getGetter() + "||已离线");
                     }
-                } else if (message.getMesType().equals(MessageType.MESSAGE_GET_ONLINE_USERS)) {
+                } else if (message.getMesType().equals(MessageType.MESSAGE_FILE_MES)) {
+                    System.out.println("用户||" + message.getSender() + "||向||" + message.getGetter() + "||发送文件");
+                    if (ManageServerConnectClientThread.getServerConnectClientThread(message.getGetter()) != null) {
+                        ServerConnectClientThread serverConnectClientThread
+                                = ManageServerConnectClientThread.getServerConnectClientThread(message.getGetter());
+                        ObjectOutputStream oos = new ObjectOutputStream
+                                (serverConnectClientThread.getSocket().getOutputStream());
+                        oos.writeObject(message);
+                        System.out.println("已发送！");
+                    } else {
+                        Message message2 = new Message();
+                        message2.setMesType(MessageType.MESSAGE_FILE_MES_FAIL);
+                        message2.setContent("对方已离线！");
+
+                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(message2);
+
+                        System.out.println("||" + message.getGetter() + "||已离线");
+                    }
+                }else if (message.getMesType().equals(MessageType.MESSAGE_GET_ONLINE_USERS)) {
                     System.out.println("用户||" + message.getSender() + "||获取在线用户列表");
 
                     Message message2 = new Message();

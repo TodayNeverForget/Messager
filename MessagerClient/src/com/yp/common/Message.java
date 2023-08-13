@@ -13,8 +13,16 @@ public class Message implements Serializable {
     private String getter;
     private String sendTime;
     private String mesType;//消息类型
+    private byte[] file;//二进制文件
 
 
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
+    }
 
     public String getContent() {
         return content;

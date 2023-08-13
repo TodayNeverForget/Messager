@@ -30,6 +30,10 @@ public class ManageServerConnectClientThread {
 
     }
 
+    public static HashMap<String, ServerConnectClientThread> getHm() {
+        return hm;
+    }
+
     public static void sendMessageToAll(Message message) {
 
         ObjectOutputStream oos;

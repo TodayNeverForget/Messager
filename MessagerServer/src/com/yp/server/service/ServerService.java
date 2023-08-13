@@ -44,6 +44,7 @@ public class ServerService {
         Socket socket;
         User user;
         Message message;
+        new MessagePush().start();
 //        ManageServerConnectClientThread manageServerConnectClientThread = new ManageServerConnectClientThread();
 
         try {
