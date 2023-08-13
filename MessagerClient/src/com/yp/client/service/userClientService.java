@@ -17,6 +17,7 @@ public class userClientService {
 //    private User user = new User();
     private User user;
     private Message message;
+    Socket socket;
 
     public boolean checkUser(String userId, String passwd) {
         boolean isSuccess = false;
@@ -26,7 +27,7 @@ public class userClientService {
 
 
         try {
-            Socket socket = new Socket("127.0.0.1", 8888);
+            socket = new Socket("127.0.0.1", 8888);
 
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(user);
@@ -39,6 +40,7 @@ public class userClientService {
             if (message.getMesType().equals(MessageType.MESSAGE_LOGIN_SUCCEED)) {
                 ClientConnectServerThread ccst = new ClientConnectServerThread(socket);
                 ccst.start();//启动线程
+                System.out.println("客户端线程，等待接收服务端消息...");
                 ManageClientConnectServerThread.addClientConnectServerThread(userId, ccst);
                 isSuccess = true;
             } else {
@@ -52,16 +54,36 @@ public class userClientService {
         return isSuccess;
     }
 
+    //该实现应该做成一个消息类 以后期处理更多的消息发送
+    public void sendMessage(String getter, String content) {
+        message = new Message();
+        message.setMesType(MessageType.MESSAGE_CONVERSATION);
+        message.setSender(user.getUserId());
+        message.setGetter(getter);
+        message.setContent(content);
+
+        try {
+            //为什么不用该类本身的socket呢？
+            ObjectOutputStream oos =
+                    new ObjectOutputStream(ManageClientConnectServerThread.
+                            getClientConnectServerThread(user.getUserId()).getSocket().getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getOnlineUsersList() {
         message = new Message();
         message.setMesType(MessageType.MESSAGE_GET_ONLINE_USERS);
         message.setSender(user.getUserId());
 
         try {
-            ObjectOutputStream objectOutputStream =
+            //为什么不用该类本身的socket呢？
+            ObjectOutputStream oos =
                     new ObjectOutputStream(ManageClientConnectServerThread.
                     getClientConnectServerThread(user.getUserId()).getSocket().getOutputStream());
-            objectOutputStream.writeObject(message);
+            oos.writeObject(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,6 +91,26 @@ public class userClientService {
     }
 
 
+    public void logout() {
+        message = new Message();
+        message.setMesType(MessageType.MESSAGE_CLIENT_EXIT);
+        message.setSender(user.getUserId());
+
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(ManageClientConnectServerThread.
+                    getClientConnectServerThread(user.getUserId()).getSocket().getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
 

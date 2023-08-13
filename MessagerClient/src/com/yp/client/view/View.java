@@ -1,5 +1,6 @@
 package com.yp.client.view;
 
+import com.yp.client.service.MessageService;
 import com.yp.client.service.userClientService;
 import com.yp.client.utils.Utility;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Test;
  */
 public class View {
     private String input;
+    private String content;
     userClientService userClientService = new userClientService();
+    MessageService messageService = new MessageService();
 
     public static void main(String[] args) {
         new View().mainMenu();
@@ -46,11 +49,13 @@ public class View {
                     break;
                 case "9":
                     loop = false;
+                    System.out.println("退出系统");
+                    userClientService.logout();
+                    System.exit(0);
                     break;
             }
         }
 
-        System.out.println("退出系统");
 
     }
 
@@ -61,8 +66,8 @@ public class View {
         while (loop) {
             System.out.println("000000000||欢迎" + user + "||000000000");
             System.out.println("\t1. 获取在线用户");
-            System.out.println("\t2. 群发消息");
-            System.out.println("\t3. 私发消息");
+            System.out.println("\t2. 私发消息");
+            System.out.println("\t3. 群发消息");
             System.out.println("\t4. 更多功能...");
             System.out.println("\t9. 退出");
             System.out.print("\n\n\n请选择: ");
@@ -72,6 +77,29 @@ public class View {
                 case "1":
                     userClientService.getOnlineUsersList();
                     //因列表显示延迟问题 预估需要在此休眠10ms等待列表回送显示完成
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "2":
+                    System.out.print("你要私发给谁：");
+                    String getter = Utility.readString(20);
+                    System.out.print("内容：");
+                    content = Utility.readString(200);
+                    messageService.sendMessageToOne(user, getter, content);
+//                    userClientService.sendMessage(getter, content);
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "3":
+                    System.out.print("输入群发内容：");
+                    content = Utility.readString(200);
+                    messageService.sendMessageToAll(user, content);
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {

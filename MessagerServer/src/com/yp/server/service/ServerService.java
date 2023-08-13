@@ -66,6 +66,7 @@ public class ServerService {
                     ServerConnectClientThread serverConnectClientThread =
                             new ServerConnectClientThread(user.getUserId(), socket);
                     serverConnectClientThread.start();
+                    System.out.println("服务端与客户端 " + user.getUserId() + " 连接中...");
                     ManageServerConnectClientThread.addServerConnectClientThread(user.getUserId(),
                             serverConnectClientThread);
 

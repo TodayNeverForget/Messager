@@ -1,11 +1,13 @@
 package com.yp.client.service;
 
 import java.util.HashMap;
+import java.util.HashSet;
+
 /**
  * @author 杨鹏
  * @version 1.0
  */
-public class ManageClientConnectServerThread extends Thread {
+public class ManageClientConnectServerThread {
     private static HashMap<String, ClientConnectServerThread> hm = new HashMap<>();
 
     public static void addClientConnectServerThread(String userId, ClientConnectServerThread clientConnectServerThread) {
@@ -16,8 +18,15 @@ public class ManageClientConnectServerThread extends Thread {
         return hm.get(userId);
     }
 
-    @Override
-    public void run() {
+    public static HashSet getClientConnetServerUsersId() {
+        HashSet<String> UsersId = new HashSet<>();
+
+        for (String userId : hm.keySet()) {
+            UsersId.add(userId);
+        }
+
+        return UsersId;
 
     }
+
 }

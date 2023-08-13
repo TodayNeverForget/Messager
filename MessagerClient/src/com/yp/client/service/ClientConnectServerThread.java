@@ -2,6 +2,7 @@ package com.yp.client.service;
 import com.yp.common.Message;
 import com.yp.common.MessageType;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
@@ -27,7 +28,6 @@ public class ClientConnectServerThread extends Thread{
         while (true) {
 
             try {
-                System.out.println("客户端线程，等待从服务端发来的消息...");
                 ois = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ois.readObject();
 
@@ -40,7 +40,20 @@ public class ClientConnectServerThread extends Thread{
                         System.out.println("\t用户：" + onlineUser);
                     }
 
+                }else if (message.getMesType().equals(MessageType.MESSAGE_COMM_MES )) {
 
+                    System.out.println("\n" + message.getSender() + " 对 " +
+                            message.getGetter() + " 说：" + message.getContent() + "  " + message.getSendTime());
+
+                } else if (message.getMesType().equals(MessageType.MESSAGE_TO_ALL_MES )) {
+                    System.out.println("\n(群发消息)");
+                    System.out.println(message.getSender() + " 对大家说 "
+                            + message.getContent() + "  " + message.getSendTime());
+
+                } else if (message.getMesType().equals(MessageType.MESSAGE_COMM_MES_FAIL)){
+                    System.out.println(message.getContent());
+                }else {
+                    System.out.println("其它情况");
                 }
 
             } catch (Exception e) {
