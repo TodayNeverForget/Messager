@@ -21,7 +21,7 @@ public class MessageService {
 
          message = new Message();
 
-         message.setMesType(MessageType.MESSAGE_CONVERSATION);
+         message.setMesType(MessageType.MESSAGE_COMM_MES);
          message.setSender(sender);
          message.setGetter(getter);
          message.setContent(content);
@@ -44,7 +44,7 @@ public class MessageService {
     public void sendMessageToAll(String sender, String content) {
         message = new Message();
 
-        message.setMesType(MessageType.MESSAGE_CONVERSATION_ALL);
+        message.setMesType(MessageType.MESSAGE_TO_ALL_MES);
         message.setSender(sender);
         message.setContent(content);
         message.setSendTime(new Date().toString());
