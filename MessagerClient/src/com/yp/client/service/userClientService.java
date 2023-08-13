@@ -57,7 +57,7 @@ public class userClientService {
     //该实现应该做成一个消息类 以后期处理更多的消息发送
     public void sendMessage(String getter, String content) {
         message = new Message();
-        message.setMesType(MessageType.MESSAGE_CONVERSATION);
+        message.setMesType(MessageType.MESSAGE_COMM_MES);
         message.setSender(user.getUserId());
         message.setGetter(getter);
         message.setContent(content);
