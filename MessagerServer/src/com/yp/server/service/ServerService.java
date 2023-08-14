@@ -71,6 +71,8 @@ public class ServerService {
                     ManageServerConnectClientThread.addServerConnectClientThread(user.getUserId(),
                             serverConnectClientThread);
 
+                    //判断该用户是否有离线消息
+                    OfflineService.checkofflineInformation(user.getUserId());
                 } else {
                     //登陆失败
                     System.out.println("登陆失败！！！");

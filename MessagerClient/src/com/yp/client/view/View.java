@@ -67,6 +67,12 @@ public class View {
         String content;
 
         while (loop) {
+            //等待离线消息加载完成
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("000000000||欢迎" + user + "||000000000");
             System.out.println("\t1. 获取在线用户");
             System.out.println("\t2. 私发消息");

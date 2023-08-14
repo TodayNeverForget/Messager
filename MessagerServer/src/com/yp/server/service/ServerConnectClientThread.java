@@ -39,6 +39,12 @@ public class ServerConnectClientThread extends Thread {
             try {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 Message message = (Message) ois.readObject();
+                //判断接收方是否在线
+                //加入下面判断后为什么客户机退出后这里会报错
+                if (OfflineService.checkOfflineUsers(message.getGetter(), message)) {
+                    System.out.println("该用户处于离线状态，消息已暂存。");
+                    continue;
+                }
                 //处理用户获取在线用户列表信息
                 if (message.getMesType().equals(MessageType.MESSAGE_COMM_MES)) {
                     System.out.println("用户||" + message.getSender() + "||向||" + message.getGetter() + "||发送消息");
